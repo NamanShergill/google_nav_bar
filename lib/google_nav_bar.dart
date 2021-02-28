@@ -2,6 +2,7 @@ library google_nav_bar;
 
 import 'dart:async';
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -84,6 +85,7 @@ class _GNavState extends State<GNav> {
             mainAxisAlignment: widget.mainAxisAlignment,
             children: widget.tabs
                 .map((t) => GButton(
+                      heroTag: t.heroTag,
                       key: t.key,
                       border: t.border ?? widget.tabBorder,
                       activeBorder: t.activeBorder ?? widget.tabActiveBorder,
@@ -157,6 +159,7 @@ class GButton extends StatefulWidget {
   final TextStyle textStyle;
   final double iconSize;
   final Function onPressed;
+  final String heroTag;
   final String text;
   final IconData icon;
   final Color backgroundColor;
@@ -173,14 +176,15 @@ class GButton extends StatefulWidget {
   const GButton({
     Key key,
     this.active,
+    @required this.heroTag,
     this.haptic,
     this.backgroundColor,
-    this.icon,
+    @required this.icon,
     this.iconColor,
     this.rippleColor,
     this.hoverColor,
     this.iconActiveColor,
-    this.text = '',
+    @required this.text,
     this.textColor,
     this.padding,
     this.margin,
@@ -215,6 +219,7 @@ class _GButtonState extends State<GButton> {
         activeBorder: widget.activeBorder,
         shadow: widget.shadow,
         debug: widget.debug,
+        heroTag: widget.heroTag,
         duration: widget.duration,
         iconSize: widget.iconSize,
         active: widget.active,
@@ -257,6 +262,7 @@ class Button extends StatefulWidget {
       this.color,
       this.rippleColor,
       this.hoverColor,
+      this.heroTag,
       this.onPressed,
       this.duration,
       this.curve,
@@ -274,6 +280,7 @@ class Button extends StatefulWidget {
   final IconData icon;
   final double iconSize;
   final Text text;
+  final String heroTag;
   final Widget leading;
   final Color iconActiveColor;
   final Color iconColor;
@@ -383,7 +390,7 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
                 Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                   Opacity(
                     opacity: 0,
-                    child: icon,
+                    child: Hero(tag: widget.heroTag, child: icon),
                   ),
                   Container(
 //               width: double.infinity,
